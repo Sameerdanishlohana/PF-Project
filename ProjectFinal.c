@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-typedef struct CropMinerals 
+typedef struct CropMinerals
 {
     char crop_name[20];
     float salinity_min, salinity_max;
@@ -15,35 +15,33 @@ typedef struct CropMinerals
     float water_table_min, water_table_max;
 } CropData;
 
-CropData crops[] = 
-{
-    {"Wheat", 0, 4, 1.5, 2.5, 0.5, 1.0, 1.0, 1.5, 0.4, 0.8, 6.5, 7.5, 3.0, 10.0},
-    {"Cotton", 0, 5, 1.2, 2.0, 0.4, 0.8, 1.5, 2.0, 0.3, 0.7, 7.0, 8.0, 3.0, 5.0},
-    {"Rice", 0, 5, 1.0, 1.8, 0.4, 0.9, 0.8, 1.2, 0.3, 0.6, 6.0, 7.0, 1.5, 5.0},
-    {"Sugarcane", 0, 4, 1.2, 2.5, 0.6, 1.0, 1.2, 2.0, 0.3, 0.8, 7.0, 8.0, 3.0, 6.0}
-};
+CropData crops[] =
+    {
+        {"Wheat", 0, 4, 1.5, 2.5, 0.5, 1.0, 1.0, 1.5, 0.4, 0.8, 6.5, 7.5, 3.0, 10.0},
+        {"Cotton", 0, 5, 1.2, 2.0, 0.4, 0.8, 1.5, 2.0, 0.3, 0.7, 7.0, 8.0, 3.0, 5.0},
+        {"Rice", 0, 5, 1.0, 1.8, 0.4, 0.9, 0.8, 1.2, 0.3, 0.6, 6.0, 7.0, 1.5, 5.0},
+        {"Sugarcane", 0, 4, 1.2, 2.5, 0.6, 1.0, 1.2, 2.0, 0.3, 0.8, 7.0, 8.0, 3.0, 6.0}};
 
-typedef struct Regions 
+typedef struct Regions
 {
     char crop_name[20];
     char regions[3][20];
 } RegionValidity;
 
-RegionValidity Regions[] = 
-{
-    {"Wheat", {"Punjab", "Sindh", "KPK"}},
-    {"Cotton", {"Sindh", "Punjab", "KPK"}},
-    {"Rice", {"Punjab", "Sindh", "KPK"}},
-    {"Sugarcane", {"Punjab", "Sindh", "KPK"}}
-};
+RegionValidity Regions[] =
+    {
+        {"Wheat", {"Punjab", "Sindh", "KPK"}},
+        {"Cotton", {"Sindh", "Punjab", "KPK"}},
+        {"Rice", {"Punjab", "Sindh", "KPK"}},
+        {"Sugarcane", {"Punjab", "Sindh", "KPK"}}};
 
-typedef struct FertilizerPerAcre 
+typedef struct FertilizerPerAcre
 {
     float gypsum_per_acre;
     float urea_per_acre;
 } Fertilizer;
 
-typedef struct 
+typedef struct
 {
     int day, month, year;
 } Date;
@@ -54,7 +52,8 @@ void AnalysisofSoilWater(CropData crop, float *values, char *region, char *seaso
 void EstimateMinerals(int land_area, float salinity, float nitrogen, FILE *file);
 void savereportfile(char *region, char *season, CropData crop, float *values, Date date, FILE *file, int recovery_months, int issues);
 
-int main() {
+int main()
+{
     char region[20], season[20], cropname[20];
     int regionchoice, seasonchoice;
     float landarea;
@@ -74,15 +73,23 @@ int main() {
     scanf("%d", &regionchoice);
     getchar();
 
-    switch (regionchoice) 
+    switch (regionchoice)
     {
-        case 1: strcpy(region, "Sindh"); break;
-        case 2: strcpy(region, "Punjab"); break;
-        case 3: strcpy(region, "Balochistan"); break;
-        case 4: strcpy(region, "KPK"); break;
-        default:
-            printf("Invalid region choice. Exiting program.\n");
-            return 1;
+    case 1:
+        strcpy(region, "Sindh");
+        break;
+    case 2:
+        strcpy(region, "Punjab");
+        break;
+    case 3:
+        strcpy(region, "Balochistan");
+        break;
+    case 4:
+        strcpy(region, "KPK");
+        break;
+    default:
+        printf("Invalid region choice. Exiting program.\n");
+        return 1;
     }
 
     printf("Select the season:\n1. Winter (December to February)\n2. Spring (March to May)\n3. Summer (June to August)\n4. Autumn (September to November)\n");
@@ -90,15 +97,23 @@ int main() {
     scanf("%d", &seasonchoice);
     getchar();
 
-    switch (seasonchoice) 
+    switch (seasonchoice)
     {
-        case 1: strcpy(season, "Winter"); break;
-        case 2: strcpy(season, "Spring"); break;
-        case 3: strcpy(season, "Summer"); break;
-        case 4: strcpy(season, "Autumn"); break;
-        default:
-            printf("Invalid season choice. Exiting program.\n");
-            return 1;
+    case 1:
+        strcpy(season, "Winter");
+        break;
+    case 2:
+        strcpy(season, "Spring");
+        break;
+    case 3:
+        strcpy(season, "Summer");
+        break;
+    case 4:
+        strcpy(season, "Autumn");
+        break;
+    default:
+        printf("Invalid season choice. Exiting program.\n");
+        return 1;
     }
 
     printf("Enter the area of land being used for farming (in acres): ");
@@ -110,26 +125,26 @@ int main() {
     cropname[strcspn(cropname, "\n")] = '\0';
 
     CropData selectedcrop;
-    if (!ValidateCrop(cropname, crops, cropcount)) 
+    if (!ValidateCrop(cropname, crops, cropcount))
     {
         printf("Error: The crop '%s' is invalid.\n", cropname);
         return 1;
     }
 
-    for (int i = 0; i < cropcount; i++) 
+    for (int i = 0; i < cropcount; i++)
     {
-        if (strcmp(cropname, crops[i].crop_name) == 0) 
+        if (strcmp(cropname, crops[i].crop_name) == 0)
         {
             selectedcrop = crops[i];
             break;
         }
     }
 
-    if (ValidateRegion(cropname, region, Regions, regionscount)) 
+    if (ValidateRegion(cropname, region, Regions, regionscount))
     {
         printf("The crop '%s' can grow in region '%s'.\n", cropname, region);
-    } 
-    else 
+    }
+    else
     {
         printf("Error: The crop '%s' does not grow in region '%s'.\n", cropname, region);
         return 1;
@@ -154,10 +169,10 @@ int main() {
     int recoverymonths = 0;
     int issues = 0;
 
-    Fertilizer fertilizerConfig = {500.0, 50.0}; 
+    Fertilizer fertilizerConfig = {500.0, 50.0};
 
     FILE *file = fopen("report.txt", "w");
-    if (file == NULL) 
+    if (file == NULL)
     {
         printf("Unable to open the file for writing.\n");
         return 1;
@@ -170,73 +185,102 @@ int main() {
 
     return 0;
 }
-int ValidateCrop(char *crop_name, CropData crops[], int crop_count) {
-    for (int i = 0; i < crop_count; i++) {
-        if (strcmp(crop_name, crops[i].crop_name) == 0) {
+int ValidateCrop(char *crop_name, CropData crops[], int crop_count)
+{
+    for (int i = 0; i < crop_count; i++)
+    {
+        if (strcmp(crop_name, crops[i].crop_name) == 0)
+        {
             return 1;
         }
     }
     return 0;
 }
-int ValidateRegion(char *crop_name, char *region, RegionValidity Regions[], int region_count) {
-    for (int i = 0; i < region_count; i++) {
-        if (strcmp(crop_name, Regions[i].crop_name) == 0) {
-            for (int j = 0; j < 3; j++) {
-                if (strcmp(region, Regions[i].regions[j]) == 0) {
-                    return 1; 
+int ValidateRegion(char *crop_name, char *region, RegionValidity Regions[], int region_count)
+{
+    for (int i = 0; i < region_count; i++)
+    {
+        if (strcmp(crop_name, Regions[i].crop_name) == 0)
+        {
+            for (int j = 0; j < 3; j++)
+            {
+                if (strcmp(region, Regions[i].regions[j]) == 0)
+                {
+                    return 1;
                 }
             }
         }
     }
-    return 0; 
+    return 0;
 }
-void AnalysisofSoilWater(CropData crop, float *values, char *region, char *season, Fertilizer fertilizerConfig, FILE *file, float landarea) {
+void AnalysisofSoilWater(CropData crop, float *values, char *region, char *season, Fertilizer fertilizerConfig, FILE *file, float landarea)
+{
     int severity = 0;
 
     // Compare each parameter with thresholds
-    if (values[0] > crop.salinity_max) {
+    if (values[0] > crop.salinity_max)
+    {
         fprintf(file, "High salinity detected. Apply %.2f kg of gypsum per acre.\n", fertilizerConfig.gypsum_per_acre);
         severity++;
     }
-    if (values[1] < crop.nitrogen_min) {
+    if (values[1] < crop.nitrogen_min)
+    {
         fprintf(file, "Low nitrogen detected. Add %.2f kg of urea fertilizer per acre.\n", fertilizerConfig.urea_per_acre);
         severity++;
     }
     // Repeat for other parameters (Potassium, Calcium, etc.)
 
     // Severity grading
-    if (severity == 0) {
+    if (severity == 0)
+    {
         fprintf(file, "Soil condition: Fertile\n");
-    } else if (severity <= 3) {
+    }
+    else if (severity <= 3)
+    {
         fprintf(file, "Soil condition: Sub-Fertile\n");
-    } else {
+    }
+    else
+    {
         fprintf(file, "Soil condition: Unfertile\n");
     }
 }
+void EstimateMinerals(int land_area, float salinity, float nitrogen, FILE *file)
+{
+    float potassium = (land_area * 0.498) - (salinity * 0.12) + (nitrogen * 0.21);
+    float phosphorus = (land_area * 0.31) - (salinity * 0.04) + (nitrogen * 0.17);
+    float calcium = (land_area * 0.6) - (salinity * 0.4) + (nitrogen * 0.089);
+    float magnesium = (land_area * 0.22) - (salinity * 0.14) + (nitrogen * 0.052);
+    if (file != NULL)
+    {
+        fprintf(file, "Mineral Estimates:\n");
+        fprintf(file, "Potassium: %.2f\n", potassium);
+        fprintf(file, "Phosphorus: %.2f\n", phosphorus);
+        fprintf(file, "Calcium: %.2f\n", calcium);
+    }
+    else
+    {
+        printf("No file.\n");
+    }
+}
+void savereportfile(char *region, char *season, CropData crop, float *values, Date date, FILE *file, int recovery_months, int issues)
+{
+    if (file != NULL)
+    {
+        fprintf(file, "Report of Region: %s\n", region);
+        fprintf(file, "Season: %s\n", season);
+        fprintf(file, "Crop_Name: %s\n", crop);
+        fprintf(file, "The Values are: \n");
 
-
-
-
-// Validity of Region and Crop Function: Crop validity is basically the crop you entered is valid to the pre-defined or not.
-//                                       Region validity is if the crop even grows in that region:
-//                                           {"Wheat", {"Punjab", "Sindh", "KPK"}},
-//                                           {"Cotton", {"Sindh", "Punjab", "KPK"}},
-//                                           {"Rice", {"Punjab", "Sindh", "KPK"}},
-//                                           {"Sugarcane", {"Punjab", "Sindh", "KPK"}}
-//                                       Wheat only grows in Punjab Sindh and KPK etc.
-
-//SoilWater Analysis Function : take the input values and comparing with the pre-defined values and creating a algorithm:
-// this alogrithm finds how bad the condition of the soil is like if the compared values are all high the soil condition is poor meaning unfertile.
-// 1 = fertile 2 = sub-fertile 3 = unfertile
-
-//Estimae Minerals Functions : After inputting % of each minerals, how much 
-//    "Apply gypsum to reduce salinity", "Add urea fertilizer for nitrogen boost", "Add potassium-based fertilizers",
-//    "Add lime to improve calcium levels", "Add magnesium sulfate to correct magnesium deficiency", 
-//    "Adjust soil pH using sulfur-based additives", "Improve drainage or irrigation practices"
-// per Acre is supposed to be used....
-
-
-
-
-
-
+        for (int i = 0; i < 5; i++)
+        {
+            fprintf(file, "Value %d: %.2f\n", i + 1, values[i]);
+        }
+        fprintf(file, "Date: %02d/%02d/%04d\n", date.day, date.month, date.year);
+        fprintf(file, "Recovery_Months: %d\n", recovery_months);
+        fprintf(file, "Issues are: %d\n", issues);
+    }
+    else
+    {
+        printf("No file.\n");
+    }
+}
